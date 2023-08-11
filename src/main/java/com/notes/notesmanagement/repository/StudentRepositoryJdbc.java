@@ -37,7 +37,7 @@ public class StudentRepositoryJdbc implements StudentRepository {
     }
 
     @Override
-    public Student findById(Integer id) {
+    public Student findById(int id) {
         try {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Student WHERE std = ?");
@@ -92,7 +92,7 @@ public class StudentRepositoryJdbc implements StudentRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(int id) {
         try {
             Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Student WHERE std = ?");
