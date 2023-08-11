@@ -1,12 +1,10 @@
 package com.notes.notesmanagement.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Exams {
     private int id_exam;
     private int percentage;

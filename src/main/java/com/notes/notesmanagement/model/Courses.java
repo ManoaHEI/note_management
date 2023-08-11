@@ -1,12 +1,10 @@
 package com.notes.notesmanagement.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Courses {
     private int id_course;
     private String course_name;

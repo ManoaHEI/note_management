@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface StudentRepository {
     List<Student> findAll();
-    Student findById(Integer id);
+    Student findById(int id);
     void addStudent(Student student);
     void update(Student student);
-    void delete(Integer id);
+    void delete(int id);
 }
