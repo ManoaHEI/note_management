@@ -1,29 +1,29 @@
 package com.notes.notesmanagement.repository;
 
+import com.notes.notesmanagement.connection.DatabaseConnection;
 import com.notes.notesmanagement.model.Student;
-import org.springframework.beans.factory.annotation.Autowired;
+/*import org.springframework.beans.factory.annotation.Autowired;*/
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class StudentRepositoryJdbc implements StudentRepository {
-
-    private final DataSource dataSource;
+/*
+    private final DatabaseConnection databaseConnection;
 
     @Autowired
-    public StudentRepositoryJdbc(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public StudentRepositoryJdbc(DatabaseConnection databaseConnection) {
+        this.databaseConnection = databaseConnection;
     }
-
+*/
     @Override
     public List<Student> findAll() {
         List<Student> students = new ArrayList<>();
         try {
-            Connection connection = dataSource.getConnection();
+            Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Student");
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -39,7 +39,7 @@ public class StudentRepositoryJdbc implements StudentRepository {
     @Override
     public Student findById(int id) {
         try {
-            Connection connection = dataSource.getConnection();
+            Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Student WHERE std = ?");
             preparedStatement.setInt(1, id);
 
@@ -57,7 +57,7 @@ public class StudentRepositoryJdbc implements StudentRepository {
     @Override
     public void addStudent(Student student) {
         try {
-            Connection connection = dataSource.getConnection();
+            Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Student (std, firstname, lastname, gender, level) VALUES (?, ?, ?, ?, ?)");
 
             preparedStatement.setInt(1, student.getStd());
@@ -76,7 +76,7 @@ public class StudentRepositoryJdbc implements StudentRepository {
     @Override
     public void update(Student student) {
         try {
-            Connection connection = dataSource.getConnection();
+            Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Student SET firstname = ?, lastname = ?, gender = ?, level = ? WHERE std = ?");
 
             preparedStatement.setString(1, student.getFirstname());
@@ -94,7 +94,7 @@ public class StudentRepositoryJdbc implements StudentRepository {
     @Override
     public void delete(int id) {
         try {
-            Connection connection = dataSource.getConnection();
+            Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Student WHERE std = ?");
 
             preparedStatement.setInt(1, id);
