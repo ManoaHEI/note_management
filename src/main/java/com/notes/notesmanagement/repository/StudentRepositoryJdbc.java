@@ -1,60 +1,117 @@
 package com.notes.notesmanagement.repository;
 
 import com.notes.notesmanagement.model.Student;
-
-import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class StudentRepositoryJdbc implements StudentRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
 
     @Autowired
-    public StudentRepositoryJdbc(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public StudentRepositoryJdbc(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Student> findAll() {
-        String sql = "SELECT * FROM Student";
-        return jdbcTemplate.query(sql, new StudentRowMapper());
+        List<Student> students = new ArrayList<>();
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Student");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                students.add(mapStudent(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return students;
     }
 
     @Override
     public Student findById(Integer id) {
-        String sql = "SELECT * FROM Student WHERE std = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new StudentRowMapper());
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Student WHERE std = ?");
+            preparedStatement.setInt(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapStudent(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public void addStudent(Student student) {
-        String sql = "INSERT INTO Student (std, firstname, lastname, gender, level) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, student.getStd(), student.getFirstname(), student.getLastname(), student.getGender(), student.getLevel());
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Student (std, firstname, lastname, gender, level) VALUES (?, ?, ?, ?, ?)");
+
+            preparedStatement.setInt(1, student.getStd());
+            preparedStatement.setString(2, student.getFirstname());
+            preparedStatement.setString(3, student.getLastname());
+            preparedStatement.setString(4, student.getGender());
+            preparedStatement.setString(5, student.getLevel());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void update(Student student) {
-        String sql = "UPDATE Student SET firstname = ?, lastname = ?, gender = ?, level = ? WHERE std = ?";
-        jdbcTemplate.update(sql, student.getFirstname(), student.getLastname(), student.getGender(), student.getLevel(), student.getStd());
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Student SET firstname = ?, lastname = ?, gender = ?, level = ? WHERE std = ?");
+
+            preparedStatement.setString(1, student.getFirstname());
+            preparedStatement.setString(2, student.getLastname());
+            preparedStatement.setString(3, student.getGender());
+            preparedStatement.setString(4, student.getLevel());
+            preparedStatement.setInt(5, student.getStd());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void delete(Integer std) {
-        String sql = "DELETE FROM Student WHERE std = ?";
-        jdbcTemplate.update(sql, std);
+    public void delete(Integer id) {
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Student WHERE std = ?");
+
+            preparedStatement.setInt(1, id);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    private static class StudentRowMapper implements RowMapper<Student> {
-        @Override
-        public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Student(rs.getInt("std"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("gender"), rs.getString("level"));
-        }
+    private Student mapStudent(ResultSet resultSet) throws SQLException {
+        return new Student(
+            resultSet.getInt("std"),
+            resultSet.getString("firstname"),
+            resultSet.getString("lastname"),
+            resultSet.getString("gender"),
+            resultSet.getString("level")
+        );
     }
 }
