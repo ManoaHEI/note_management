@@ -8,14 +8,15 @@ CREATE TABLE Student (
 
 CREATE TABLE Courses (
 	id_course SERIAL PRIMARY KEY,
-	course_name VARCHAR(50) NOT NULL,
+	course_name VARCHAR(50) NOT NULL UNIQUE,
 	credits INT NOT NULL
 );
 
 CREATE TABLE Exams (
 	id_exams SERIAL PRIMARY KEY,
 	percentage INT NOT NULL,
-	id_course INT REFERENCES Courses(id_course)
+	id_course INT REFERENCES Courses(id_course),
+	note FLOAT NOT NULL
 );
 
 CREATE TABLE take_exams (

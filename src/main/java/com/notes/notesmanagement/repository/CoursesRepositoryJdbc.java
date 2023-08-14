@@ -17,14 +17,7 @@ import com.notes.notesmanagement.model.Courses;
 
 @Repository
 public class CoursesRepositoryJdbc implements CoursesRepository {
-/*    
-    private final DatabaseConnection databaseConnection;
 
-    @Autowired
-    public CoursesRepositoryJdbc(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
-    }
-*/
     @Override
     public List<Courses> findAll() {
         List<Courses> courses = new ArrayList<>();
