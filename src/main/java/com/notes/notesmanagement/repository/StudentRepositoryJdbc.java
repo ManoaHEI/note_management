@@ -11,14 +11,7 @@ import java.util.List;
 
 @Repository
 public class StudentRepositoryJdbc implements StudentRepository {
-/*
-    private final DatabaseConnection databaseConnection;
 
-    @Autowired
-    public StudentRepositoryJdbc(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
-    }
-*/
     @Override
     public List<Student> findAll() {
         List<Student> students = new ArrayList<>();
