@@ -7,9 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-/*import org.springframework.beans.factory.annotation.Autowired;*/
 import org.springframework.stereotype.Repository;
 
 import com.notes.notesmanagement.connection.DatabaseConnection;
@@ -17,14 +14,7 @@ import com.notes.notesmanagement.model.Courses;
 
 @Repository
 public class CoursesRepositoryJdbc implements CoursesRepository {
-/*    
-    private final DatabaseConnection databaseConnection;
 
-    @Autowired
-    public CoursesRepositoryJdbc(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
-    }
-*/
     @Override
     public List<Courses> findAll() {
         List<Courses> courses = new ArrayList<>();

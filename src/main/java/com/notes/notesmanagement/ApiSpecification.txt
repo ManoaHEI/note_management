@@ -1,0 +1,36 @@
+TODO: ajouter une petite interface de connection avec deux type d'utilisateur un étudiant et un enseignant.
+Un étudiant ne rien modifier. Il ne peut que consulte les informations lui concernant.
+Un enseignant peut faire un CRUD de tout.
+
+/students:
+-get: retourne tous les étudiants sous forme de tableau d'étudiants
+-post: envoyer un objet étudiant
+
+/students/{std}:
+-get: retourne l'objet étudiant correspondant à l'std avec toutes les informations comme les examens auxquelles il a participer et la note qu'il a eu à cette examen
+
+/exams:
+-get: retourne toutes les examens avec les informations qui correspondent
+-post: envoyer un objet étudiant
+
+/exams/{id}:
+-get retourne l'objet étudiant qui correspond à l'id avec ça moyenne dans générale dans les examens toutes matières confondue et pour chaque examen les notes les plus basse et les plus haute
+
+/courses:
+-get: retourne tous les cours avec les informations suivantes :
+    -id du cours
+    -nom du cours
+    -credit du cours
+    -la moyenne générale
+    -la note la plus haute
+    -la note la plus basse
+-post: envoye un objet cours
+
+/courses/{id} ou /courses/{course_name}:
+-get: retourne tous les cours qui correspondent à l'id ou au course_name avec les informations suivantes :
+    -id du cours
+    -nom du cours
+    -credit du cours
+    -la moyenne générale
+    -la note la plus haute
+    -la note la plus basse

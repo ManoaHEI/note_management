@@ -2,7 +2,6 @@ package com.notes.notesmanagement.repository;
 
 import com.notes.notesmanagement.connection.DatabaseConnection;
 import com.notes.notesmanagement.model.Student;
-/*import org.springframework.beans.factory.annotation.Autowired;*/
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
