@@ -53,12 +53,13 @@ public class ExamsRepositoryJdbc implements ExamsRepository {
     public void addExams(Exams exams) {
         try {
             Connection connection = DatabaseConnection.getConnection();
+
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Exams (percentage, std, id_course, note) VALUES (?, ?, ?, ?)");
 
             preparedStatement.setInt(1, exams.getPercentage());
             preparedStatement.setInt(2, exams.getStd());
             preparedStatement.setInt(3, exams.getId_course());
-            preparedStatement.setInt(4, exams.getNote());
+            preparedStatement.setDouble(4, exams.getNote());
 
             preparedStatement.executeUpdate();
 

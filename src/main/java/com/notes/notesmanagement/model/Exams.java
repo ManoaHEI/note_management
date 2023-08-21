@@ -14,5 +14,5 @@ public class Exams {
     private int percentage;
     private int std;
     private int id_course;
-    private int note;
+    private double note;
 }
