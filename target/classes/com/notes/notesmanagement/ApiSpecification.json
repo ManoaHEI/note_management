@@ -1,0 +1,325 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API Documentation",
+    "description": "API Documentation for Student Management System",
+    "version": "1.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/students": {
+      "get": {
+        "summary": "Get a list of all students",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Student"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new student",
+        "parameters": [
+          {
+            "name": "student",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Student"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Student created successfully"
+          }
+        }
+      }
+    },
+    "/students/{std}": {
+      "get": {
+        "summary": "Get details of a student by ID",
+        "parameters": [
+          {
+            "name": "std",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/StudentDetails"
+            }
+          }
+        }
+      }
+    },
+    "/exams": {
+      "get": {
+        "summary": "Get a list of all exams",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Exam"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new exam",
+        "parameters": [
+          {
+            "name": "exam",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Exam"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Exam created successfully"
+          }
+        }
+      }
+    },
+    "/exams/{id}": {
+      "get": {
+        "summary": "Get details of an exam by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/ExamDetails"
+            }
+          }
+        }
+      }
+    },
+    "/courses": {
+      "get": {
+        "summary": "Get a list of all courses with additional information",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Course"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new course",
+        "parameters": [
+          {
+            "name": "course",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Course"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Course created successfully"
+          }
+        }
+      }
+    },
+    "/courses/{id}": {
+      "get": {
+        "summary": "Get details of a course by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/CourseDetails"
+            }
+          }
+        }
+      }
+    },
+    "/courses/{name}": {
+      "get": {
+        "summary": "Get details of a course by name",
+        "parameters": [
+          {
+            "name": "course_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/CourseDetails"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Student": {
+      "type": "object",
+      "properties": {
+        "std": {
+          "type": "integer",
+          "description": "ID of the student"
+        },
+        "firstname": {
+          "type": "string",
+          "description": "First name of the student"
+        },
+        "lastname": {
+          "type": "string",
+          "description": "Last name of the student"
+        },
+        "gender": {
+          "type": "string",
+          "description": "Gender of the student"
+        },
+        "level": {
+          "type": "string",
+          "description": "Level of the student"
+        }
+      }
+    },
+    "StudentDetails": {
+      "type": "object",
+      "properties": {
+        "Student": {
+          "$ref": "#/definitions/Student"
+        },
+        "exams": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Exam"
+          },
+          "description": "List of exams the student participated in"
+        }
+      }
+    },
+    "Exam": {
+      "type": "object",
+      "properties": {
+        "id_exam": {
+          "type": "integer",
+          "description": "ID of the exam"
+        },
+        "percentage": {
+          "type": "integer",
+          "description": "Percentage score of the exam"
+        },
+        "std": {
+          "type": "integer",
+          "description": "ID of the student"
+        },
+        "id_course": {
+          "type": "integer",
+          "description": "ID of the course"
+        },
+        "note": {
+          "type": "number",
+          "description": "The student note"
+        }
+      }
+    },
+    "ExamDetails": {
+      "type": "object",
+      "properties": {
+        "Exam": {
+          "$ref": "#/definitions/Exam"
+        },
+        "average": {
+          "type": "number",
+          "description": "Average score of all students in the exam"
+        },
+        "min": {
+          "type": "number",
+          "description": "Minimum score in the exam"
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum score in the exam"
+        }
+      }
+    },
+    "Course": {
+      "type": "object",
+      "properties": {
+        "id_course": {
+          "type": "integer",
+          "description": "ID of the course"
+        },
+        "course_name": {
+          "type": "string",
+          "description": "Name of the course"
+        },
+        "credits": {
+          "type": "integer",
+          "description": "Number of credits for the course"
+        }
+      }
+    },
+    "CourseDetails": {
+      "type": "object",
+      "properties": {
+        "Course": {
+          "$ref": "#/definitions/Course"
+        },
+        "average": {
+          "type": "number",
+          "description": "Average score of all students in the course"
+        },
+        "min": {
+          "type": "number",
+          "description": "Minimum score in the course"
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum score in the course"
+        }
+      }
+    }
+  }  
+}

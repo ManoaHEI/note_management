@@ -16,7 +16,7 @@ CREATE TABLE Exams (
 	id_exams SERIAL PRIMARY KEY,
 	percentage INT NOT NULL,
 	id_course INT REFERENCES Courses(id_course),
-	note FLOAT NOT NULL
+	note FLOAT NOT NULL CHECK (note >= 0 AND note <= 20)
 );
 
 CREATE TABLE take_exams (
