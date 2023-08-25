@@ -36,8 +36,13 @@ public class CoursesController {
 
     @PostMapping
     public void addCourses(@RequestBody Courses courses) {
-        coursesService.addCourses(courses);
+        if (courses.getCourse_name() == null || courses.getCredits() == null) {
+            throw new IllegalArgumentException("Both courseName and credits are required.");
+        }
+
+        coursesService.addCourses(courses.getCourse_name(), courses.getCredits());
     }
+
 
     @PutMapping("/{id}")
     public void updateCourses(@PathVariable int id, @RequestBody Courses courses) {

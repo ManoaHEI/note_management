@@ -2,17 +2,12 @@ package com.notes.notesmanagement.service;
 
 import com.notes.notesmanagement.model.Courses;
 import com.notes.notesmanagement.repository.CoursesRepository;
-<<<<<<< HEAD
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-=======
-
-import java.util.List;
-
->>>>>>> 906da8a4a076c07108be5d177ed9bf1ec5a14db9
 public class CoursesServiceImpl implements CoursesService {
 
     private final CoursesRepository coursesRepository;
@@ -32,8 +27,8 @@ public class CoursesServiceImpl implements CoursesService {
     }
 
     @Override
-    public void addCourses(Courses courses) {
-        coursesRepository.addCourses(courses);
+    public void addCourses(String course_name , int credits) {
+        coursesRepository.addCourses(course_name, credits);
     }
 
     @Override
@@ -46,8 +41,4 @@ public class CoursesServiceImpl implements CoursesService {
         coursesRepository.delete(id);
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 906da8a4a076c07108be5d177ed9bf1ec5a14db9
