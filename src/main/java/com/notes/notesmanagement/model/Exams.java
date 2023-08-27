@@ -12,7 +12,6 @@ import lombok.ToString;
 public class Exams {
     private int id_exam;
     private int percentage;
-    private int std;
     private int id_course;
     private double note;
 }

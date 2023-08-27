@@ -54,12 +54,11 @@ public class ExamsRepositoryJdbc implements ExamsRepository {
         try {
             Connection connection = DatabaseConnection.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Exams (percentage, std, id_course, note) VALUES (?, ?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Exams (percentage, id_course, note) VALUES (?, ?, ?)");
 
             preparedStatement.setInt(1, exams.getPercentage());
-            preparedStatement.setInt(2, exams.getStd());
-            preparedStatement.setInt(3, exams.getId_course());
-            preparedStatement.setDouble(4, exams.getNote());
+            preparedStatement.setInt(2, exams.getId_course());
+            preparedStatement.setDouble(3, exams.getNote());
 
             preparedStatement.executeUpdate();
 
@@ -99,9 +98,8 @@ public class ExamsRepositoryJdbc implements ExamsRepository {
 
     private Exams mapExams(ResultSet resultSet) throws SQLException {
         return new Exams(
-                resultSet.getInt("id_exam"),
+                resultSet.getInt("id_exams"),
                 resultSet.getInt("percentage"),
-                resultSet.getInt("std"),
                 resultSet.getInt("id_course"),
                 resultSet.getInt("note")
         );
