@@ -25,22 +25,22 @@ group by course_name, std;
 
 --Affiche la note moyenne d'un étudiant dans une matière spécifique
 SELECT (course_name , std ,
-           (select sum(notess)
-        from (SELECT (note * exams.percentage / 100) as notess
-        FROM exams
-        INNER JOIN courses c ON c.id_course = exams.id_course
-        INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams
-        INNER JOIN student s on s.std = take_exams.id_student
-        WHERE course_name = 'PROG1'
-        AND std = 22001
-        GROUP BY id_student, exams.id_exams, note, exams.percentage) as average)
+        (SELECT sum(notess)
+        FROM (SELECT (note * exams.percentage / 100) AS notess
+            FROM exams
+                INNER JOIN courses c ON c.id_course = exams.id_course
+                INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams
+                INNER JOIN student s ON s.std = take_exams.id_student
+                WHERE course_name = 'PROG1'
+                AND std = 22001
+                GROUP BY id_student, exams.id_exams, note, exams.percentage) AS average)
        )FROM exams
-        INNER JOIN courses c on c.id_course = exams.id_course
-        INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams
-        INNER JOIN student s on s.std = take_exams.id_student
+            INNER JOIN courses c ON c.id_course = exams.id_course
+            INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams
+            INNER JOIN student s ON s.std = take_exams.id_student
 WHERE course_name = 'PROG1'
-  AND std = 22001
-group by course_name, std;
+   AND std = 22001
+GROUP BY course_name, std;
 
 --Affiche la moyenne générale d'un étudiant (utilise la requete précédente)
 --Formule pour calculer la moyenne d'un étudiant dans chaque matière : somme des moyennes de l'élève dans chaque matière
