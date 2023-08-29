@@ -7,7 +7,7 @@ import com.notes.notesmanagement.model.Courses;
 public interface CoursesRepository {
     List<Courses> findAll();
     Courses findById(int id);
-    void addCourses(Courses courses);
+    void addCourses(String course_name , int credits);
     void update(Courses courses);
     void delete(int id);
 }

@@ -49,15 +49,15 @@ public class CoursesRepositoryJdbc implements CoursesRepository {
         }
         return null;
     }
-    
+
     @Override
-    public void addCourses(Courses courses) {
+    public void addCourses(String course_name , int credits) {
         try {
             Connection connection = DatabaseConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Courses (course_name, credits) VALUES (?, ?)");
 
-            preparedStatement.setString(1, courses.getCourse_name());
-            preparedStatement.setInt(2, courses.getCredits());
+            preparedStatement.setString(1, course_name);
+            preparedStatement.setInt(2, credits);
 
             preparedStatement.executeUpdate();
 
@@ -98,7 +98,7 @@ public class CoursesRepositoryJdbc implements CoursesRepository {
 
     private Courses mapCourses(ResultSet resultSet) throws SQLException {
         return new Courses(
-            resultSet.getInt("id_courses"), 
+            resultSet.getInt("id_course"), 
             resultSet.getString("course_name"),
             resultSet.getInt("credits")
         );
