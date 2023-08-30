@@ -1,6 +1,7 @@
 package com.notes.notesmanagement.service;
 
 import com.notes.notesmanagement.model.TakeExam;
+import com.notes.notesmanagement.model.TakeExamExtended;
 import com.notes.notesmanagement.repository.TakeExamRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +17,28 @@ public class TakeExamServiceImpl implements TakeExamService {
     }
 
     @Override
-    public List<TakeExam> getAllExamNote() {
+    public List<TakeExamExtended> getAllExamNote() {
         return takeExamRepository.findAllExamNote();
     }
 
     @Override
-    public List<TakeExam> getExamNoteByIdStudent(int id) {
+    public List<TakeExamExtended> getExamNoteByIdStudent(int id) {
         return takeExamRepository.findExamNoteByIdStudent(id);
     }
 
     @Override
-    public List<TakeExam> getExamNoteByIdExam(int id) {
+    public List<TakeExamExtended> getExamNoteByIdExam(int id) {
         return takeExamRepository.findExamNoteByIdExam(id);
     }
 
     @Override
-    public TakeExam getExamNoteById(int idStudent, int idExam) {
+    public TakeExamExtended getExamNoteById(int idStudent, int idExam) {
         return takeExamRepository.findExamNoteById(idStudent , idExam);
+    }
+
+    @Override
+    public List<TakeExamExtended> findStudentAverageInACourse(String courseName , int std) {
+        return takeExamRepository.findStudentAverageInACourse(courseName, std);
     }
 
     @Override

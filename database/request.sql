@@ -14,13 +14,13 @@ SELECT (course_name , std ,
                         INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams
                         INNER JOIN student s on s.std = take_exams.id_student
                WHERE course_name = 'PROG1'
-                 AND std = 22001
+                 AND std = 22001c
                GROUP BY id_student, exams.id_exams, note, exams.percentage) as average)
            )FROM exams
                      INNER JOIN courses c on c.id_course = exams.id_course
                      INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams
                      INNER JOIN student s on s.std = take_exams.id_student
-WHERE course_name = 'PROG1'
+WHERE course_name = 'PROG1' AND std = 22001
 group by course_name, std;
 
 --Affiche la note moyenne d'un étudiant dans une matière spécifique
@@ -58,3 +58,9 @@ SELECT (course_name , count(note * exams.percentage / 100))FROM exams
 group by course_name;
 
 --Affiche l'étudiant ayant eu la note min / max obtenue dans un examen
+
+--
+SELECT (note, std , firstname , lastname , gender , level , course_name) FROM student
+        INNER JOIN take_exams te on student.std = te.id_student
+        INNER JOIN exams e on e.id_exams = te.id_exams
+        INNER JOIN courses c on c.id_course = e.id_course;

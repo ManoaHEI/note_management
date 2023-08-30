@@ -13,5 +13,4 @@ public class Exams {
     private int id_exam;
     private int percentage;
     private int id_course;
-    private double note;
 }

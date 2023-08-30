@@ -2,6 +2,8 @@ package com.notes.notesmanagement.repository;
 
 import com.notes.notesmanagement.connection.DatabaseConnection;
 import com.notes.notesmanagement.model.TakeExam;
+import com.notes.notesmanagement.model.TakeExamExtended;
+
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -14,19 +16,19 @@ import java.util.List;
 @Repository
 public class TakeExamRepositoryJdbc implements TakeExamRepository {
     @Override
-    public List<TakeExam> findAllExamNote() {
-        List<TakeExam> takeExams = new ArrayList<>();
+    public List<TakeExamExtended> findAllExamNote() {
+        List<TakeExamExtended> takeExams = new ArrayList<>();
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String sql = "SELECT (std , firstname , lastname , gender , level , note  , course_name) FROM student\n" +
+            String sql = "SELECT note, std , firstname , lastname , gender , level , course_name FROM student\n" +
                     "    INNER JOIN take_exams te on student.std = te.id_student\n" +
-                    "   std INNER JOIN exams e on e.id_exams = te.id_exams\n" +
+                    "    INNER JOIN exams e on e.id_exams = te.id_exams\n" +
                     "    INNER JOIN courses c on c.id_course = e.id_course;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                takeExams.add(mapTakeExam(resultSet));
+                takeExams.add(mapTakeExamExtended(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,11 +37,11 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
     }
 
     @Override
-    public List<TakeExam> findExamNoteByIdStudent(int std) {
-        List<TakeExam> takeExams = new ArrayList<>();
+    public List<TakeExamExtended> findExamNoteByIdStudent(int std) {
+        List<TakeExamExtended> takeExams = new ArrayList<>();
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String sql = "SELECT (std , firstname , lastname , gender , level , note  , course_name) FROM student\n" +
+            String sql = "SELECT std , firstname , lastname , gender , level , note  , course_name FROM student\n" +
                     "    INNER JOIN take_exams te on student.std = te.id_student\n" +
                     "    INNER JOIN exams e on e.id_exams = te.id_exams\n" +
                     "    INNER JOIN courses c on c.id_course = e.id_course\n" +
@@ -51,7 +53,7 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                takeExams.add(mapTakeExam(resultSet));
+                takeExams.add(mapTakeExamExtended(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,11 +62,11 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
     }
 
     @Override
-    public List<TakeExam> findExamNoteByIdExam(int id) {
-        List<TakeExam> takeExams = new ArrayList<>();
+    public List<TakeExamExtended> findExamNoteByIdExam(int id) {
+        List<TakeExamExtended> takeExams = new ArrayList<>();
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String sql = "SELECT (std , firstname , lastname , gender , level , note  , course_name) FROM student\n" +
+            String sql = "SELECT std , firstname , lastname , gender , level , note  , course_name FROM student\n" +
                     "    INNER JOIN take_exams te on student.std = te.id_student\n" +
                     "    INNER JOIN exams e on e.id_exams = te.id_exams\n" +
                     "    INNER JOIN courses c on c.id_course = e.id_course\n" +
@@ -76,7 +78,7 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                takeExams.add(mapTakeExam(resultSet));
+                takeExams.add(mapTakeExamExtended(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,10 +87,10 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
     }
 
     @Override
-    public TakeExam findExamNoteById(int idStudent, int idExam) {
+    public TakeExamExtended findExamNoteById(int idStudent, int idExam) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String sql = "SELECT (std , firstname , lastname , gender , level , note  , course_name) FROM student\n" +
+            String sql = "SELECT std , firstname , lastname , gender , level , note  , course_name FROM student\n" +
                     "    INNER JOIN take_exams te on student.std = te.id_student\n" +
                     "    INNER JOIN exams e on e.id_exams = te.id_exams\n" +
                     "    INNER JOIN courses c on c.id_course = e.id_course\n" +
@@ -100,7 +102,7 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return mapTakeExam(resultSet);
+                    return mapTakeExamExtended(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -110,15 +112,56 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
     }
 
     @Override
+    public List<TakeExamExtended> findStudentAverageInACourse(String courseName , int std) {
+        List<TakeExamExtended> takeExams = new ArrayList<>();
+        try {
+            Connection connection = DatabaseConnection.getConnection();
+            String sql = "SELECT (course_name , std ,\n" + //
+                    "        (select sum(notess)\n" + //
+                    "         from (SELECT (note * exams.percentage / 100) as notess\n" + //
+                    "               FROM exams\n" + //
+                    "                        INNER JOIN courses c ON c.id_course = exams.id_course\n" + //
+                    "                        INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams\n" + //
+                    "                        INNER JOIN student s on s.std = take_exams.id_student\n" + //
+                    "               WHERE course_name = '?'\n" + //
+                    "                 AND std = ?\n" + //
+                    "               GROUP BY id_student, exams.id_exams, note, exams.percentage) as average)\n" + //
+                    "           )FROM exams\n" + //
+                    "                     INNER JOIN courses c on c.id_course = exams.id_course\n" + //
+                    "                     INNER JOIN take_exams ON take_exams.id_exams = exams.id_exams\n" + //
+                    "                     INNER JOIN student s on s.std = take_exams.id_student\n" + //
+                    "WHERE course_name = '?' AND std = ?\n" + //
+                    "group by course_name, std";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, courseName);
+            preparedStatement.setInt(2, std);
+            preparedStatement.setString(3, courseName);
+            preparedStatement.setInt(4, std);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                takeExams.add(mapTakeExamExtended(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return takeExams;
+    }
+
+    @Override
     public void addTakeExam(TakeExam takeExam) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            String sql = "INSERT INTO take_exams VALUES (? , ? , ?);";
+            String sql = "INSERT INTO take_exams VALUES (? , ? , ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1 , takeExam.getId_exam());
             preparedStatement.setInt(2 , takeExam.getId_student());
             preparedStatement.setDouble(3 , takeExam.getNote());
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,11 +246,15 @@ public class TakeExamRepositoryJdbc implements TakeExamRepository {
         }
     }
 
-    private TakeExam mapTakeExam(ResultSet resultSet) throws SQLException {
-        return new TakeExam(
-                resultSet.getInt("id_exam"),
-                resultSet.getInt("id_student"),
-                resultSet.getDouble("note")
+    private TakeExamExtended mapTakeExamExtended(ResultSet resultSet) throws SQLException {
+        return new TakeExamExtended(
+                resultSet.getDouble("note"),
+                resultSet.getInt("std"),
+                resultSet.getString("firstname"),
+                resultSet.getString("lastname"),
+                resultSet.getString("gender"),
+                resultSet.getString("level"),
+                resultSet.getString("course_name")
         );
     }
 }
