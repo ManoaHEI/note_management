@@ -196,7 +196,7 @@
         "summary": "Add TakeExam",
         "parameters": [
           {
-            "name": TakeExam",
+            "name": "TakeExam",
             "in": "body",
             "required": true,
             "schema": {
