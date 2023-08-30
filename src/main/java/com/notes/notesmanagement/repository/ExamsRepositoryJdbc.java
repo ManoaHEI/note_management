@@ -54,11 +54,10 @@ public class ExamsRepositoryJdbc implements ExamsRepository {
         try {
             Connection connection = DatabaseConnection.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Exams (percentage, id_course, note) VALUES (?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Exams (percentage, id_course) VALUES (?, ?)");
 
             preparedStatement.setInt(1, exams.getPercentage());
             preparedStatement.setInt(2, exams.getId_course());
-            preparedStatement.setDouble(3, exams.getNote());
 
             preparedStatement.executeUpdate();
 
@@ -100,8 +99,7 @@ public class ExamsRepositoryJdbc implements ExamsRepository {
         return new Exams(
                 resultSet.getInt("id_exams"),
                 resultSet.getInt("percentage"),
-                resultSet.getInt("id_course"),
-                resultSet.getInt("note")
+                resultSet.getInt("id_course")
         );
     }
 }
